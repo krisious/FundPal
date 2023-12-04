@@ -1,4 +1,4 @@
-package com.example.fundpal.view.fragment;
+package com.example.fundpal.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.example.fundpal.R;
-import com.example.fundpal.view.MainActivity;
 
 public class SplashScreen extends AppCompatActivity {
 

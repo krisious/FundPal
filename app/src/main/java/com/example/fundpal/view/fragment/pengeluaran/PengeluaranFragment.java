@@ -1,5 +1,6 @@
 package com.example.fundpal.view.fragment.pengeluaran;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,10 +71,36 @@ public class PengeluaranFragment extends Fragment implements PengeluaranAdapter.
         btnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pengeluaranViewModel.deleteAllData();
-                tvTotal.setText("0");
+                showDeleteConfirmationDialog();
             }
         });
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Konfirmasi");
+        builder.setMessage("Anda yakin ingin menghapus semua data?");
+
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Hapus semua data jika pengguna memilih 'Ya'
+                pengeluaranViewModel.deleteAllData();
+                tvTotal.setText("0");
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Batal menghapus jika pengguna memilih 'Tidak'
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void initAdapter() {

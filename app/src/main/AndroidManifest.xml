@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FundPal"
         tools:targetApi="31">
         <activity
-            android:name=".view.fragment.SplashScreen"
+            android:name=".view.SplashScreen"
             android:exported="true">
 
         <intent-filter>
