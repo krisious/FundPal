@@ -48,6 +48,6 @@ public interface DatabaseDao {
     @Query("SELECT SUM(jml_uang) FROM tbl_keuangan WHERE tipe = 'pemasukan'")
     LiveData<Integer> getTotalPemasukan();
 
-    @Query("UPDATE tbl_keuangan SET keterangan = :keterangan, tanggal = :tgl, jml_uang = :harga WHERE uid = :uid and tipe = 'pemasukan'")
-    void updateDataPemasukan(String keterangan, String tgl, int harga, int uid);
+    @Query("UPDATE tbl_keuangan SET keterangan = :keterangan, tanggal = :tgl, jml_uang = :harga, image_path = :imagePath WHERE uid = :uid and tipe = 'pemasukan'")
+    void updateDataPemasukan(String keterangan, String tgl, int harga, String imagePath,  int uid);
 }

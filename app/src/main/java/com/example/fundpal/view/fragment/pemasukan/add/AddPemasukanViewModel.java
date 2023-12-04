@@ -23,7 +23,7 @@ public class AddPemasukanViewModel extends AndroidViewModel {
         databaseDao = DatabaseClient.getInstance(application).getAppDatabase().databaseDao();
     }
 
-    public void addPemasukan(final String type, final String note, final String date, final int price) {
+    public void addPemasukan(final String type, final String note, final String date, final int price, final String imagePath) {
         Completable.fromAction(new Action() {
                     @Override
                     public void run() throws Exception {
@@ -32,6 +32,7 @@ public class AddPemasukanViewModel extends AndroidViewModel {
                         pemasukan.keterangan = note;
                         pemasukan.tanggal = date;
                         pemasukan.jmlUang = price;
+                        pemasukan.imagePath = imagePath; // Set imagePath to the model
                         databaseDao.insertPemasukan(pemasukan);
                     }
                 })
@@ -40,11 +41,11 @@ public class AddPemasukanViewModel extends AndroidViewModel {
                 .subscribe();
     }
 
-    public void updatePemasukan(final int uid, final String note, final String date, final int price) {
+    public void updatePemasukan(final int uid, final String note, final String date, final int price, final String imagePath) {
         Completable.fromAction(new Action() {
                     @Override
                     public void run() throws Exception {
-                        databaseDao.updateDataPemasukan(note, date, price, uid);
+                        databaseDao.updateDataPemasukan(note, date, price, imagePath, uid);
                     }
                 })
                 .subscribeOn(Schedulers.io())

@@ -32,13 +32,12 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AddPemasukanActivity extends AppCompatActivity {
-    private static String KEY_IS_EDIT = "key_is_edit";
-    private static String KEY_DATA = "key_data";
+    private static final String KEY_IS_EDIT = "key_is_edit";
+    private static final String KEY_DATA = "key_data";
 
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private ImageView ivGambar;
     private String imageFilePath = null;
-
 
     public static void startActivity(Context context, boolean isEdit, ModelDatabase pemasukan) {
         Intent intent = new Intent(new Intent(context, AddPemasukanActivity.class));
@@ -52,9 +51,9 @@ public class AddPemasukanActivity extends AppCompatActivity {
     private boolean mIsEdit = false;
     private int strId = 0;
 
-    Toolbar toolbar;
-    TextInputEditText etKeterangan, etTanggal, etJmlUang;
-    Button btnSimpan;
+    private Toolbar toolbar;
+    private TextInputEditText etKeterangan, etTanggal, etJmlUang;
+    private Button btnSimpan, btnCapture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +66,15 @@ public class AddPemasukanActivity extends AppCompatActivity {
         etJmlUang = findViewById(R.id.etJmlUang);
         btnSimpan = findViewById(R.id.btnSimpan);
         ivGambar = findViewById(R.id.ivGambar);
-        Button btnCapture = findViewById(R.id.btnCapture);
+        btnCapture = findViewById(R.id.btnCapture);
 
-        btnCapture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        btnCapture.setOnClickListener(v -> dispatchTakePictureIntent());
 
         setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         addPemasukanViewModel = ViewModelProviders.of(this).get(AddPemasukanViewModel.class);
 
@@ -90,15 +85,12 @@ public class AddPemasukanActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
                 ex.printStackTrace();
             }
-            // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.fundpal.fileprovider",
@@ -110,17 +102,14 @@ public class AddPemasukanActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
-
-        // Save a file: path for use with ACTION_VIEW intents
         imageFilePath = image.getAbsolutePath();
         return image;
     }
@@ -129,13 +118,11 @@ public class AddPemasukanActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            // Update ImageView with captured image
             if (imageFilePath != null) {
                 Glide.with(this).load(imageFilePath).into(ivGambar);
             }
         }
     }
-
 
     private void loadData() {
         mIsEdit = getIntent().getBooleanExtra(KEY_IS_EDIT, false);
@@ -150,6 +137,12 @@ public class AddPemasukanActivity extends AppCompatActivity {
                 etKeterangan.setText(keterangan);
                 etTanggal.setText(tanggal);
                 etJmlUang.setText(String.valueOf(uang));
+
+                // Load gambar dari path pada ModelDatabase
+                if (pemasukan.imagePath != null) {
+                    Glide.with(this).load(pemasukan.imagePath).into(ivGambar);
+                    imageFilePath = pemasukan.imagePath;
+                }
             }
         }
     }
@@ -172,27 +165,24 @@ public class AddPemasukanActivity extends AppCompatActivity {
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
         });
 
-        btnSimpan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String strTipe = "pemasukan";
-                String strKeterangan = etKeterangan.getText().toString();
-                String strTanggal = etTanggal.getText().toString();
-                String strJmlUang = etJmlUang.getText().toString();
+        btnSimpan.setOnClickListener(v -> {
+            String strTipe = "pemasukan";
+            String strKeterangan = etKeterangan.getText().toString();
+            String strTanggal = etTanggal.getText().toString();
+            String strJmlUang = etJmlUang.getText().toString();
 
-                if (strKeterangan.isEmpty() || strTanggal.isEmpty() || strJmlUang.isEmpty()) {
-                    Toast.makeText(AddPemasukanActivity.this, "Ups, form tidak boleh kosong!",
-                            Toast.LENGTH_SHORT).show();
+            if (strKeterangan.isEmpty() || strTanggal.isEmpty() || strJmlUang.isEmpty()) {
+                Toast.makeText(AddPemasukanActivity.this, "Ups, form tidak boleh kosong!",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                if (mIsEdit) {
+                    addPemasukanViewModel.updatePemasukan(strId, strKeterangan, strTanggal,
+                            Integer.parseInt(strJmlUang), imageFilePath);
                 } else {
-                    if (mIsEdit) {
-                        addPemasukanViewModel.updatePemasukan(strId, strKeterangan, strTanggal,
-                                Integer.parseInt(strJmlUang));
-                    } else {
-                        addPemasukanViewModel.addPemasukan(strTipe, strKeterangan, strTanggal,
-                                Integer.parseInt(strJmlUang));
-                    }
-                    finish();
+                    addPemasukanViewModel.addPemasukan(strTipe, strKeterangan, strTanggal,
+                            Integer.parseInt(strJmlUang), imageFilePath);
                 }
+                finish();
             }
         });
     }
