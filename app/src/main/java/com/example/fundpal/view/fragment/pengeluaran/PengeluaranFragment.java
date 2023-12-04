@@ -30,8 +30,7 @@ public class PengeluaranFragment extends Fragment implements PengeluaranAdapter.
     private PengeluaranViewModel pengeluaranViewModel;
     private List<ModelDatabase> modelDatabase = new ArrayList<>();
     TextView tvTotal, tvNotFound;
-    Button btnHapus;
-    FloatingActionButton fabAdd;
+    FloatingActionButton fabAdd, btnHapus;
     RecyclerView rvListData;
 
     public PengeluaranFragment() {

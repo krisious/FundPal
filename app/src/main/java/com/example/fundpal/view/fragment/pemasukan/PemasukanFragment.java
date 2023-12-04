@@ -30,8 +30,7 @@ public class PemasukanFragment  extends Fragment implements PemasukanAdapter.Pem
     private PemasukanViewModel pemasukanViewModel;
     private List<ModelDatabase> modelDatabaseList = new ArrayList<>();
     TextView tvTotal, tvNotFound;
-    Button btnHapus;
-    FloatingActionButton fabAdd;
+    FloatingActionButton fabAdd, btnHapus;
     RecyclerView rvListData;
 
     public PemasukanFragment() {
