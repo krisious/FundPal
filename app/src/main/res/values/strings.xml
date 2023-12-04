@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FundPal</string>
+    <string name="fundnull">Ups, belum ada pengeluaran.\nYuk catat pengeluaran Kamu!</string>
 </resources>
