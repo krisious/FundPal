@@ -9,4 +9,5 @@
     <color name="teal_700">#FF018786</color>
     <color name="primary">#63A294</color>
     <color name="gray_light">#ffdbdbdb</color>
+    <color name="danger">#CC0000</color>
 </resources>

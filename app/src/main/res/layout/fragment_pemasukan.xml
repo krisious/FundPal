@@ -53,20 +53,6 @@
         android:layout_below="@id/cvTotal"
         android:layout_marginTop="16dp" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnHapus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:layout_toStartOf="@id/fabAdd"
-        android:background="@drawable/bg_button_primary"
-        android:text="Hapus Semua"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
@@ -77,6 +63,18 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_add"
         app:fabSize="normal" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnHapus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_delete_white"
+        app:fabSize="normal"
+        app:backgroundTint="@color/danger"/>
 
     <TextView
         android:id="@+id/tvNotFound"
