@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -55,8 +56,8 @@ public class StatistikFragment extends Fragment {
             // Update the UI with the total pemasukan
             tvTotalPemasukan.setText(String.format("Rp %,d", totalPemasukan));
 
-            // Recalculate total keuangan when pemasukan changes
-            calculateTotalKeuangan(totalPemasukan, pengeluaranViewModel.getTotalPengeluaran().getValue());
+            // Recalculate total keuangan
+            calculateTotalKeuangan();
         });
 
         // Observe total pengeluaran changes
@@ -64,18 +65,27 @@ public class StatistikFragment extends Fragment {
             // Update the UI with the total pengeluaran
             tvTotalPengeluaran.setText(String.format("Rp %,d", totalPengeluaran));
 
-            // Recalculate total keuangan when pengeluaran changes
-            calculateTotalKeuangan(pemasukanViewModel.getTotalPemasukan().getValue(), totalPengeluaran);
+            // Recalculate total keuangan
+            calculateTotalKeuangan();
         });
     }
 
-    private void calculateTotalKeuangan(Number totalPemasukan, Number totalPengeluaran) {
+    private void calculateTotalKeuangan() {
+        // Get the values from the TextViews
+        long totalPemasukan = getLongValue(tvTotalPemasukan);
+        long totalPengeluaran = getLongValue(tvTotalPengeluaran);
+
         // Calculate total keuangan
-        if (totalPemasukan != null && totalPengeluaran != null) {
-            long pemasukan = totalPemasukan.longValue();
-            long pengeluaran = totalPengeluaran.longValue();
-            long totalKeuangan = pemasukan - pengeluaran;
-            tvTotalKeuangan.setText(String.format("Rp %,d", totalKeuangan));
+        long totalKeuangan = totalPemasukan - totalPengeluaran;
+        tvTotalKeuangan.setText(String.format("Rp %,d", totalKeuangan));
+    }
+
+    private long getLongValue(TextView textView) {
+        try {
+            String text = textView.getText().toString().replace("Rp", "").replace(",", "").trim();
+            return Long.parseLong(text);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 }
