@@ -25,6 +25,9 @@ public class ModelDatabase implements Parcelable {
     @ColumnInfo(name = "tanggal")
     public String tanggal;
 
+    @ColumnInfo(name = "image_path")
+    public String imagePath;
+
     public ModelDatabase() {
     }
 
@@ -40,6 +43,7 @@ public class ModelDatabase implements Parcelable {
         dest.writeString(this.keterangan);
         dest.writeInt(this.jmlUang);
         dest.writeString(this.tanggal);
+        dest.writeString(this.imagePath);
     }
 
     protected ModelDatabase(Parcel in) {
@@ -48,6 +52,7 @@ public class ModelDatabase implements Parcelable {
         this.keterangan = in.readString();
         this.jmlUang = in.readInt();
         this.tanggal = in.readString();
+        this.imagePath = in.readString();
     }
 
     public static final Creator<ModelDatabase> CREATOR = new Creator<ModelDatabase>() {
